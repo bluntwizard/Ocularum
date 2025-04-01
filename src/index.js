@@ -1,24 +1,54 @@
-const express = require('express');
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+import App from './App';
+import store from './store';
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Routes
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Ocularum API!' });
+// Create theme
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#9146FF', // Twitch purple
+    },
+    secondary: {
+      main: '#00B5AD', // Teal
+    },
+    background: {
+      default: '#18181B', // Twitch dark
+      paper: '#1F1F23', // Twitch darker
+    },
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
+  },
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
-});
+// Create root
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-}); 
+// Render app
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
+); 

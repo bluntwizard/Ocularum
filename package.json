@@ -1,35 +1,88 @@
 {
   "name": "ocularum",
   "version": "0.1.0",
-  "description": "A modern application for visual data processing",
-  "main": "src/index.js",
+  "description": "An Electron-based desktop application for watching Twitch streams with automatic tuning capabilities",
+  "main": "electron/main/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "jest",
-    "lint": "eslint ."
+    "start": "electron .",
+    "dev": "concurrently \"npm run dev:react\" \"npm run dev:electron\"",
+    "dev:react": "cross-env BROWSER=none react-scripts start",
+    "dev:electron": "cross-env NODE_ENV=development electron .",
+    "build": "react-scripts build && electron-builder",
+    "build:react": "react-scripts build",
+    "build:electron": "electron-builder",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yourusername/Ocularum.git"
+  "build": {
+    "appId": "com.bluntwizard.ocularum",
+    "productName": "Ocularum",
+    "files": [
+      "build/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "python",
+        "to": "resources/python",
+        "filter": ["**/*", "!**/__pycache__/**", "!**/*.pyc"]
+      }
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "mac": {
+      "category": "public.app-category.entertainment"
+    },
+    "linux": {
+      "category": "Network;Video;AudioVideo",
+      "target": ["AppImage", "deb"]
+    },
+    "win": {
+      "target": "nsis"
+    }
   },
-  "keywords": [
-    "ocularum",
-    "visual",
-    "data"
-  ],
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yourusername/Ocularum/issues"
-  },
-  "homepage": "https://github.com/yourusername/Ocularum#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.11.16",
+    "@reduxjs/toolkit": "^1.9.3",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.8",
+    "electron-updater": "^5.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "5.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "^8.45.0",
-    "jest": "^29.6.1",
-    "nodemon": "^3.0.1"
+    "concurrently": "^8.0.1",
+    "cross-env": "^7.0.3",
+    "electron": "^24.0.0",
+    "electron-builder": "^23.6.0",
+    "eslint": "^8.38.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "browserslist": {
+    "production": [
+      "last 1 electron version"
+    ],
+    "development": [
+      "last 1 electron version"
+    ]
+  },
+  "author": "BluntWizard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluntwizard/Ocularum.git"
   }
 }
